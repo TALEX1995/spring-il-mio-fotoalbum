@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="ISO-8859-1">
+	<!-- Bootstrap CSS -->
+	<link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" />
+	<title>Foto</title>
+</head>
+
+<body>
+	<div class="container my-3">
+		<h1 class="text-center mb-3">Tutte le foto</h1>
+		<div class="my-5 d-flex justify-content-end">
+			<a href="/photos/create" class="btn btn-primary">Inserisci una nuova foto</a>
+		</div>
+		<div th:each="photo : ${photos}" :key="${photo.id}" class="card mb-3">
+			<div class="row g-0">
+				<div class="col-md-4">
+					<img th:src="${photo.photoUrl}" class="img-fluid rounded-start">
+				</div>
+				<div class="col-md-8">
+					<div class="card-body">
+						<h5 class="card-title">[[${photo.title}]]</h5>
+						<p class="card-text">[[${photo.description}]]</p>
+						<p class="card-text">
+							<span class="fw-bold">Categorie:</span> <span th:each="cat, iterStat : ${photo.categories}">
+								<span th:text="${cat.title}"></span>
+								<span th:if="${!iterStat.last}">,</span>
+								<span th:if="${iterStat.last}">.</span>
+							</span>
+						</p>
+						<p class="card-text">
+							<small th:if="${photo.visible}" class="text-body-secondary">Il post è visibile a
+								tutti</small>
+							<small th:unless="${photo.visible}" class="text-body-secondary">Il post non è visibile ad
+								altri utenti</small>
+						</p>
+						<div class="d-flex justify-content-end">
+							<a th:href="@{/photos/{id} (id=${photo.id})}" class="btn btn-primary">Dettaglio</a>
+							<a th:href="@{/photos/edit/{id} (id=${photo.id})}" class="btn btn-secondary mx-3">Modifica</a>
+							<form method="POST" th:action="@{/photos/delete/{id} (id=${photo.id})}">
+								<button type="submit" class="btn btn-primary" value="STORE">Elimina</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+
+</html>

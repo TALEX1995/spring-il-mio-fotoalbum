@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="ISO-8859-1">
+	<!-- Bootstrap CSS -->
+	<link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" />
+	<title>Crea foto</title>
+</head>
+
+<body>
+	<div class="container mt-5">
+		<h1 class="text-center" th:if="${photo.title == null}">
+			Inserisci una nuova foto
+		</h1>
+		<h1 class="text-center" th:unless="${photo.title == null}">
+			Modifica la foto
+		</h1>
+
+		<form class="my-3" th:object="${photo}" method="POST">
+
+			<!--	Title -->
+			<div class="form-group my-2">
+				<label for="title">Titolo Foto</label>
+				<input type="text" class="form-control" id="title" placeholder="Inserisci il titolo della foto"
+					th:field="*{title}">
+				<div th:replace="frags :: errorDiv('title')" />
+			</div>
+
+			<!--	Description-->
+			<div class="form-group my-2">
+				<label for="description">Descrizione Foto</label>
+				<input type="text" class="form-control" id="description"
+					placeholder="Inserisci la descrizione della pizza" th:field="*{description}">
+				<div th:replace="frags :: errorDiv('description')" />
+			</div>
+
+			<!--	Photo-->
+			<div class="form-group my-2">
+				<label for="photoUrl">Url photo</label>
+				<input type="text" class="form-control" id="photoUrl" placeholder="Inserisci l'url della foto"
+					th:field="*{photoUrl}">
+				<div th:replace="frags :: errorDiv('photoUrl')" />
+			</div>
+
+			<!--	Visible-->
+			<div>
+				<label for="visible">Spunta se vuoi che la foto sia visibile al publico</label>
+				<input type="checkbox" id="visible" th:field="*{visible}" th:checked="${photo.visible}">
+				<div th:replace="frags :: errorDiv('visible')" />
+			</div>
+			
+<!--		Categories-->
+			<h3 class="mt-3">Categorie</h3>
+			<div th:each="cat : ${categories}" th:object="${cat}" class="mb-3">
+				<input type="checkbox" th:value="*{id}" th:field="${photo.categories}"
+					th:id="${'category-' + cat.id}">
+
+				<label th:for="${'category-' + cat.id}">
+					[[*{title}]]
+				</label>
+			</div>
+
+			<button type="submit" class="btn btn-primary" value="STORE">Submit</button>
+		</form>
+
+	</div>
+</body>
+
+</html>

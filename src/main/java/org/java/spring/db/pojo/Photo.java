@@ -1,12 +1,20 @@
 package org.java.spring.db.pojo;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -26,19 +34,25 @@ public class Photo {
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
 	
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "TEXT", nullable = false)
 	private String photoUrl;
 	
 	@NotNull
 	private boolean visible;
 	
-	public Photo() {};
+//	Relations
+	@ManyToMany(fetch = FetchType.EAGER)
+	private List<Category> categories;
 	
-	public Photo(String title, String description, String photoUrl) {
+	
+	public Photo() { };
+	
+	public Photo(String title, String description, String photoUrl, boolean visible, Category...categories) {
 		setTitle(title);
 		setDescription(description);
 		setPhotoUrl(photoUrl);
-		visible = true;
+		setVisible(visible);
+		setCategories(categories);
 	}
 
 	public int getId() {
@@ -82,5 +96,18 @@ public class Photo {
 	}
 	
 	
+	@JsonProperty("categories")
+	public List<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
+	}
+	
+	@JsonIgnore
+	private void setCategories(Category...categories) {
+		setCategories(Arrays.asList(categories));
+	}
 	
 }
