@@ -1,5 +1,10 @@
 package org.java.spring;
 
+import org.java.spring.auth.conf.AuthConf;
+import org.java.spring.auth.db.pojo.Role;
+import org.java.spring.auth.db.pojo.User;
+import org.java.spring.auth.db.serv.RoleService;
+import org.java.spring.auth.db.serv.UserService;
 import org.java.spring.db.pojo.Category;
 import org.java.spring.db.pojo.Photo;
 import org.java.spring.db.serv.CategoryService;
@@ -22,6 +27,12 @@ public class SpringIlMioFotoalbumApplication implements CommandLineRunner{
 	@Autowired
 	private CategoryService categoryService;
 	
+	@Autowired 
+	private RoleService roleService;
+	
+	@Autowired 
+	private UserService userService;
+	
 	@Override
 	public void run(String...args) throws Exception {
 		
@@ -42,5 +53,16 @@ public class SpringIlMioFotoalbumApplication implements CommandLineRunner{
 		photoService.save(new Photo("La mia terza foto", "Questa è la mia terza photo", "https://www.keblog.it/wp-content/uploads/2021/12/foto-piu-belle-2021-30.jpg", true, cat2, cat4));
 		photoService.save(new Photo("La mia quarta foto", "Questa è la mia quarta photo", "https://images.agi.it/pictures/agi/agi/2016/03/17/154253836-ebce30d5-3e45-46f8-8dde-df97ac3e95e8.jpg", false, cat1, cat4));
 		photoService.save(new Photo("La mia quinta foto", "Questa è la mia quinta photo", "https://heymondo.it/blog/wp-content/uploads/2023/05/Citta-piu-grande-del-mondo.jpg", false, cat5));
+		
+		
+		Role roleAdmin = new Role("ADMIN");
+		
+		roleService.save(roleAdmin);
+		
+		String pass = AuthConf.passwordEncoder().encode("password");
+		
+		User alexAdmin = new User("alexAdmin", pass, roleAdmin);
+		
+		userService.save(alexAdmin);
 	}
 }

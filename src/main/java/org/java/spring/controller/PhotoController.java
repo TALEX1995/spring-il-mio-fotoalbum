@@ -27,6 +27,11 @@ public class PhotoController {
 	private CategoryService categoryService;
 	
 	
+	@GetMapping("/")
+	public String home() {
+		return "home";
+	}
+	
 	@GetMapping("/photos")
 	public String photoIndex(Model model) {
 		
@@ -64,7 +69,8 @@ public class PhotoController {
 			BindingResult bindingResult) {
 		
 		if (bindingResult.hasErrors()) {
-			
+			List<Category> categories = categoryService.findAll();
+			model.addAttribute("categories", categories);
 			System.out.println(bindingResult);
 			model.addAttribute("photo", photo);
 			return "photo-form";
@@ -97,7 +103,8 @@ public class PhotoController {
 			@PathVariable int id) {
 		
 		if (bindingResult.hasErrors()) {
-			
+			List<Category> categories = categoryService.findAll();
+			model.addAttribute("categories", categories);
 			System.out.println(bindingResult);
 			model.addAttribute("photo", photo);
 			return "photo-form";
@@ -109,7 +116,7 @@ public class PhotoController {
 	}
 	
 	@PostMapping("/photos/delete/{id}")
-	public String deletePhoto(Model model, @PathVariable int id) {
+	public String deletePhoto(@PathVariable int id) {
 		
 		Photo photo = photoService.findById(id);
 		

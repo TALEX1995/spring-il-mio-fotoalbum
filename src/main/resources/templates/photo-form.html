@@ -49,19 +49,20 @@
 				<input type="checkbox" id="visible" th:field="*{visible}" th:checked="${photo.visible}">
 				<div th:replace="frags :: errorDiv('visible')" />
 			</div>
-			
-<!--		Categories-->
+
+			<!--		Categories-->
 			<h3 class="mt-3">Categorie</h3>
 			<div th:each="cat : ${categories}" th:object="${cat}" class="mb-3">
-				<input type="checkbox" th:value="*{id}" th:field="${photo.categories}"
-					th:id="${'category-' + cat.id}">
+				<input type="checkbox" th:value="*{id}" th:field="${photo.categories}" th:id="${'category-' + cat.id}">
 
 				<label th:for="${'category-' + cat.id}">
 					[[*{title}]]
 				</label>
 			</div>
-
-			<button type="submit" class="btn btn-primary" value="STORE">Submit</button>
+			<div class="d-flex justify-content-between">
+				<a href="/photos" class="btn btn-dark">Indietro</a>
+				<button type="submit" class="btn btn-primary" value="STORE">Crea</button>
+			</div>
 		</form>
 
 	</div>
