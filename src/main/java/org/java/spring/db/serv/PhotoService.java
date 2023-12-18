@@ -36,4 +36,12 @@ public class PhotoService {
 	public List<Photo> findByVisible(){
 		return photoRepository.findByVisibleTrue();
 	}
+	
+	public List<Photo> findByUserId(Long userId) {
+        return photoRepository.findByUserId(userId);
+    }
+	
+	public List<Photo> findByTitleAndUserId(String photoTitle, Long userId){
+		return photoRepository.findByTitleContainingIgnoreCaseAndUserId(photoTitle, userId);
+	}
 }

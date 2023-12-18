@@ -1,7 +1,10 @@
 package org.java.spring.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.java.spring.auth.db.pojo.User;
+import org.java.spring.auth.db.serv.UserService;
 import org.java.spring.db.pojo.Category;
 import org.java.spring.db.pojo.Photo;
 import org.java.spring.db.serv.CategoryService;
@@ -15,6 +18,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import jakarta.validation.Valid;
 
@@ -27,6 +33,9 @@ public class PhotoController {
 	@Autowired
 	private CategoryService categoryService;
 	
+	@Autowired
+	private UserService userService;
+	
 	
 	@GetMapping("/")
 	public String home() {
@@ -35,10 +44,32 @@ public class PhotoController {
 	
 	@GetMapping("/photos")
 	public String photoIndex(Model model, @RequestParam(required=false) String photoTitle) {
+			
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
-		List<Photo> photos = photoTitle == null
-				? photoService.findAll()
-				: photoService.findByTitle(photoTitle);
+		List<Photo> photos = new ArrayList<>();
+		
+		User user = userService.findByUsername(authentication.getName());
+		
+		if (authentication != null) {
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                if (authority.getAuthority().equals("ADMIN")) {
+                    // L'utente ha il ruolo "ADMIN"
+                	photos = photoTitle == null
+            				? photoService.findAll()
+            				: photoService.findByTitle(photoTitle);
+                    
+                } else if (authority.getAuthority().equals("USER")) {
+                	// L'utente ha il ruolo "USER"
+                	if(photoTitle == null || photoTitle.isEmpty()) {
+                		photos = photoService.findByUserId((long)user.getId());
+                	} else {
+                		photos = photoService.findByTitleAndUserId(photoTitle, (long)user.getId());
+                	}
+            				
+                }
+            }
+		};
 		
 		model.addAttribute("photoTitle", photoTitle);
 		model.addAttribute("photos", photos);
@@ -49,7 +80,16 @@ public class PhotoController {
 	@GetMapping("/photos/{id}")
 	public String photoDetail(Model model, @PathVariable int id) {
 		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		User user = userService.findByUsername(authentication.getName());
+		
 		Photo photo = photoService.findById(id);
+		
+		if(user.getId() != photo.getUser().getId()) {
+			return "redirect:/photos";
+		}
+		
 		model.addAttribute("photo", photo);
 		
 		return "photo-detail";
@@ -59,6 +99,7 @@ public class PhotoController {
 	public String photoCreate(Model model) {
 		
 		Photo photo = new Photo();
+			
 		List<Category> categories = categoryService.findAll();
 
 		model.addAttribute("photo", photo);
@@ -79,6 +120,11 @@ public class PhotoController {
 			model.addAttribute("photo", photo);
 			return "photo-form";
 		}
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		User user = userService.findByUsername(authentication.getName());
+		photo.setUser(user);
 			
 		photoService.save(photo);
 		

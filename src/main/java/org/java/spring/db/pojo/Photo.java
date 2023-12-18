@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
+import org.java.spring.auth.db.pojo.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,6 +16,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -39,6 +41,9 @@ public class Photo {
 	
 	@NotNull
 	private boolean visible;
+	
+	@ManyToOne
+	private User user;
 	
 //	Relations
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -109,5 +114,15 @@ public class Photo {
 	private void setCategories(Category...categories) {
 		setCategories(Arrays.asList(categories));
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
 	
 }

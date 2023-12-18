@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface PhotoRepository extends JpaRepository<Photo, Integer> {
 	List<Photo> findByTitleContainingIgnoreCase(String title);
 	List<Photo> findByVisibleTrue();
+	List<Photo> findByUserId(Long userId);
+	List<Photo> findByTitleContainingIgnoreCaseAndUserId(String photoTitle, Long userId);
 }
