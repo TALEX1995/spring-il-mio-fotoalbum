@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="ISO-8859-1">
+	<!-- Bootstrap CSS -->
+	<link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" />
+	<title>Messagi</title>
+</head>
+
+<body>
+	<div class="container">
+		<h1 class="text-center my-4">Messaggi</h1>
+		<div class="my-5 d-flex">
+				<a class="btn btn-dark me-3" href="/photos">Foto</a>
+				<a class="btn btn-dark" href="/categories">Categorie</a>
+		</div>
+		<div th:if="${messages.empty}">
+			<h2>Non ci sono messaggi</h2>
+		</div>
+		<table class="table" th:unless="${messages.empty}">
+			<thead>
+				<tr>
+					<th scope="col">Email</th>
+					<th scope="col">Testo del messaggio</th>
+				</tr>
+			</thead>
+			<tbody th:each="message : ${messages}">
+				<tr>
+					<td>[[${message.email}]]</td>
+					<td>[[${message.messageText}]]</td>
+				</tr>				
+			</tbody>
+		</table>
+
+	</div>
+</body>
+
+</html>

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
 
@@ -33,10 +34,13 @@ public class PhotoController {
 	}
 	
 	@GetMapping("/photos")
-	public String photoIndex(Model model) {
+	public String photoIndex(Model model, @RequestParam(required=false) String photoTitle) {
 		
-		List<Photo> photos = photoService.findAll();
+		List<Photo> photos = photoTitle == null
+				? photoService.findAll()
+				: photoService.findByTitle(photoTitle);
 		
+		model.addAttribute("photoTitle", photoTitle);
 		model.addAttribute("photos", photos);
 		
 		return "photo-index";

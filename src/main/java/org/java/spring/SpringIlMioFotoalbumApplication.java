@@ -6,8 +6,10 @@ import org.java.spring.auth.db.pojo.User;
 import org.java.spring.auth.db.serv.RoleService;
 import org.java.spring.auth.db.serv.UserService;
 import org.java.spring.db.pojo.Category;
+import org.java.spring.db.pojo.Message;
 import org.java.spring.db.pojo.Photo;
 import org.java.spring.db.serv.CategoryService;
+import org.java.spring.db.serv.MessageService;
 import org.java.spring.db.serv.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -33,6 +35,9 @@ public class SpringIlMioFotoalbumApplication implements CommandLineRunner{
 	@Autowired 
 	private UserService userService;
 	
+	@Autowired
+	private MessageService messageService;
+	
 	@Override
 	public void run(String...args) throws Exception {
 		
@@ -54,6 +59,12 @@ public class SpringIlMioFotoalbumApplication implements CommandLineRunner{
 		photoService.save(new Photo("La mia quarta foto", "Questa è la mia quarta photo", "https://images.agi.it/pictures/agi/agi/2016/03/17/154253836-ebce30d5-3e45-46f8-8dde-df97ac3e95e8.jpg", false, cat1, cat4));
 		photoService.save(new Photo("La mia quinta foto", "Questa è la mia quinta photo", "https://heymondo.it/blog/wp-content/uploads/2023/05/Citta-piu-grande-del-mondo.jpg", false, cat5));
 		
+		
+		Message m1 = new Message("alex@gmail.com", "Ciao la foto numero 1 è bellissima");
+		Message m2 = new Message("aleeeex@gmail.com", "Ciao la foto numero 4 è bellissima");
+		
+		messageService.save(m1);
+		messageService.save(m2);
 		
 		Role roleAdmin = new Role("ADMIN");
 		

@@ -28,4 +28,12 @@ public class PhotoService {
 	public void delete(Photo photo) {
 		photoRepository.delete(photo);
 	}
+	
+	public List<Photo> findByTitle(String title){
+		return photoRepository.findByTitleContainingIgnoreCase(title);
+	}
+	
+	public List<Photo> findByVisible(){
+		return photoRepository.findByVisibleTrue();
+	}
 }

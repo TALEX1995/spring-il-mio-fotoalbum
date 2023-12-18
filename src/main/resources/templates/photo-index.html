@@ -12,8 +12,25 @@
 	<div class="container my-3">
 		<h1 class="text-center mb-3">Tutte le foto</h1>
 		<div class="my-5 d-flex justify-content-between">
-			<a class="btn btn-dark" href="/categories">Categorie</a>
+			<div class="d-flex align-items-center">
+				<a class="btn btn-dark me-3" href="/messages">Messaggi</a>
+				<a class="btn btn-dark" href="/categories">Categorie</a>
+			</div>
 			<a href="/photos/create" class="btn btn-primary">Inserisci una nuova foto</a>
+		</div>
+		<div class="container">
+			<form>
+				<div class="input-group mb-3 d-flex align-items-center">
+					<label for="search">Cerca in base al titolo della foto</label>
+					<input id="search" type="text" class="form-control mx-3" name="photoTitle"
+						aria-describedby="basic-addon1" placeholder="Inserisci il titolo della foto"
+						th:value="${photoTitle}">
+					<input class="btn btn-primary" type="submit" value="SEARCH">
+				</div>
+			</form>
+		</div>
+		<div th:if="${photos.empty}">
+			<h2 class="text-center">Non ci sono foto</h2>
 		</div>
 		<div th:each="photo : ${photos}" :key="${photo.id}" class="card mb-3">
 			<div class="row g-0">
@@ -39,7 +56,8 @@
 						</p>
 						<div class="d-flex justify-content-end">
 							<a th:href="@{/photos/{id} (id=${photo.id})}" class="btn btn-primary">Dettaglio</a>
-							<a th:href="@{/photos/edit/{id} (id=${photo.id})}" class="btn btn-secondary mx-3">Modifica</a>
+							<a th:href="@{/photos/edit/{id} (id=${photo.id})}"
+								class="btn btn-secondary mx-3">Modifica</a>
 							<form method="POST" th:action="@{/photos/delete/{id} (id=${photo.id})}">
 								<button type="submit" class="btn btn-danger" value="DELETE">Elimina</button>
 							</form>

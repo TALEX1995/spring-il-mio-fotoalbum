@@ -25,6 +25,8 @@ public class AuthConf {
 				        .requestMatchers("/photos/**").hasAnyAuthority("ADMIN")
 				        .requestMatchers("/categories").hasAnyAuthority("ADMIN")
 				        .requestMatchers("/categories/**").hasAnyAuthority("ADMIN")
+				        .requestMatchers("/messages").hasAnyAuthority("ADMIN")
+				        .requestMatchers("/messages/**").hasAnyAuthority("ADMIN")
 	        .requestMatchers("/api/**").permitAll()
 	        .requestMatchers("/").permitAll()
 	        .requestMatchers("/css/**", "/js/**", "/webjars/**").permitAll()
