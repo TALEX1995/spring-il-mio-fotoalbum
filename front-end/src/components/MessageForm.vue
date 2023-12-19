@@ -1,6 +1,6 @@
 <script setup>
 // IMPORT dependency
-import { defineEmits, ref } from 'vue'
+import { defineProps, defineEmits, ref } from 'vue'
 import axios from 'axios';
 
 // DATA
@@ -9,13 +9,20 @@ const newMessage = ref({
     messageText: null,
 });
 
+// PROPS
+const props = defineProps({
+    userId: {
+        type: Number
+    }
+});
+
 // EMITS
 const emits = defineEmits(["back", "sendSuccess"]);
 
 // Function
 const submit = async () => {
     const data = await axios.post(
-        "http://localhost:8080/api/messages",
+        `http://localhost:8080/api/messages?userId=${props.userId}`,
         newMessage.value
     );
 
@@ -29,8 +36,7 @@ const submit = async () => {
 
 <template>
     <div class="container">
-        <h1 class="text-center">Contatta l'amministratore della pagina</h1>
-
+        <h1 class="text-center">Contatta l'utente della foto</h1>
         <form @submit.prevent="submit">
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>

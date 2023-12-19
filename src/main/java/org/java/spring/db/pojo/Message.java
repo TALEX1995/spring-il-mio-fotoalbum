@@ -2,11 +2,14 @@ package org.java.spring.db.pojo;
 
 import java.time.LocalDate;
 
+import org.java.spring.auth.db.pojo.User;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
@@ -25,6 +28,9 @@ public class Message {
 	private String messageText;
 	
 	private LocalDate readTime;
+	
+	@ManyToOne
+	private User user;
 
 	public Message() { };
 	
@@ -66,6 +72,15 @@ public class Message {
 	public void setReadTime(LocalDate readTime) {
 		this.readTime = readTime;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
 	
 	
 }

@@ -51,6 +51,8 @@ public class PhotoController {
 		
 		User user = userService.findByUsername(authentication.getName());
 		
+		Boolean isAdmin = false;
+		
 		if (authentication != null) {
             for (GrantedAuthority authority : authentication.getAuthorities()) {
                 if (authority.getAuthority().equals("ADMIN")) {
@@ -58,6 +60,8 @@ public class PhotoController {
                 	photos = photoTitle == null
             				? photoService.findAll()
             				: photoService.findByTitle(photoTitle);
+                	
+                	isAdmin = true;
                     
                 } else if (authority.getAuthority().equals("USER")) {
                 	// L'utente ha il ruolo "USER"
@@ -71,6 +75,9 @@ public class PhotoController {
             }
 		};
 		
+		if(isAdmin) {
+			model.addAttribute("role", isAdmin);
+		}
 		model.addAttribute("photoTitle", photoTitle);
 		model.addAttribute("photos", photos);
 		
@@ -86,7 +93,9 @@ public class PhotoController {
 		
 		Photo photo = photoService.findById(id);
 		
-		if(user.getId() != photo.getUser().getId()) {
+		boolean isAdmin = isAdmin();
+		
+		if(user.getId() != photo.getUser().getId() && !isAdmin) {
 			return "redirect:/photos";
 		}
 		
@@ -137,7 +146,18 @@ public class PhotoController {
 	@GetMapping("/photos/edit/{id}")
 	public String editPhoto(Model model, @PathVariable int id) {
 		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		User user = userService.findByUsername(authentication.getName());
+		
+		boolean isAdmin = isAdmin();
+		
 		Photo photo = photoService.findById(id);
+		
+		if(user.getId() != photo.getUser().getId() && !isAdmin) {
+			return "redirect:/photos";
+		}
+		
 		List<Category> categories = categoryService.findAll();
 
 		model.addAttribute("photo", photo);
@@ -175,5 +195,21 @@ public class PhotoController {
 		return "redirect:/photos";
 	}
 	
+	public boolean isAdmin() {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		boolean isAdmin = false;
+		
+		if (authentication != null) {
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                if (authority.getAuthority().equals("ADMIN")) {
+                    // L'utente ha il ruolo "ADMIN"
+                	isAdmin = true;         
+                }
+            }
+		}
+		
+		return isAdmin;
+	}
 	
 }

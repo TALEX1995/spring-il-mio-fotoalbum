@@ -14,7 +14,7 @@
 		<div class="my-5 d-flex justify-content-between">
 			<div class="d-flex align-items-center">
 				<a class="btn btn-dark me-3" href="/messages">Messaggi</a>
-				<a class="btn btn-dark" href="/categories">Categorie</a>
+				<a class="btn btn-dark" th:if="${role}" href="/categories">Categorie</a>
 			</div>
 			<a href="/photos/create" class="btn btn-primary">Inserisci una nuova foto</a>
 		</div>

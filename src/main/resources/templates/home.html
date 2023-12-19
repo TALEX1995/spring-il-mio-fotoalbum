@@ -13,6 +13,9 @@
 </head>
 <body>
 	<div class="container d-flex align-items-center justify-content-center">
+		<div sec:authorize="isAnonymous()">
+			<a class="btn btn-dark fs-1 me-5" href="/register">Register</a>
+		</div>
 		<div sec:authorize="isAuthenticated()">
 			<a class="btn btn-primary fs-1" href="/logout">Logout</a>
 		</div>

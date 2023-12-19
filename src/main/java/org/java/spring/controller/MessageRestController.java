@@ -1,5 +1,7 @@
 package org.java.spring.controller;
 
+import org.java.spring.auth.db.pojo.User;
+import org.java.spring.auth.db.serv.UserService;
 import org.java.spring.db.pojo.Message;
 import org.java.spring.db.serv.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -19,17 +22,20 @@ public class MessageRestController {
 	@Autowired
 	private MessageService messageService;
 	
+	@Autowired
+	private UserService userService;
+	
 	
 	@PostMapping
-	public ResponseEntity<Message> create(
-			@RequestBody Message newMessage){
+	public ResponseEntity<String> create(
+			@RequestBody Message newMessage, @RequestParam int userId ){
 		
-		System.out.println(newMessage.getEmail());
-		System.out.println(newMessage.getMessageText());
+		User user = userService.findById(userId);
+		newMessage.setUser(user);
 		
 		messageService.save(newMessage);
 		
-		return new ResponseEntity<>(newMessage, HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 		
 	}
 }

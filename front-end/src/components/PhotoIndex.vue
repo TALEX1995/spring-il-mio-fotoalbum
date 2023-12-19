@@ -1,6 +1,6 @@
 <script setup>
 // IMPORT dependency
-import { defineProps } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 import { ref } from 'vue';
 
 // DATA
@@ -15,10 +15,20 @@ const props = defineProps({
     }
 });
 
+// EMITS
+const emits = defineEmits(["sendMessage", "userId"]);
+
 // Functions
 const filterPhotos = () => {
     search.value = search.value.toLowerCase();
     filteredPhotos.value = props.photos.filter(photo => photo.title.toLowerCase().includes(search.value));
+}
+
+const sendMessage = (userId) => {
+    emits('sendMessage');
+    emits('userId', userId);
+
+    return
 }
 </script>
 
@@ -41,6 +51,9 @@ const filterPhotos = () => {
                             <span v-for="cat in photo.categories">
                                 {{ cat.title + " | " }}
                             </span>
+                            <button type="button" class="btn btn-primary mt-4" @click="sendMessage(photo.user.id)">Invia
+                                Messaggio all'utente della
+                                foto</button>
                         </p>
                     </div>
                 </div>
@@ -57,6 +70,9 @@ const filterPhotos = () => {
                             <span v-for="cat in photo.categories">
                                 {{ cat.title + " | " }}
                             </span>
+                            <button type="button" class="btn btn-primary mt-4" @click="sendMessage(photo.user.id)">Invia
+                                Messaggio all'utente della
+                                foto</button>
                         </p>
                     </div>
                 </div>

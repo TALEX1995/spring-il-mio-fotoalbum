@@ -90,6 +90,8 @@ public class SpringIlMioFotoalbumApplication implements CommandLineRunner{
 		
 		Message m1 = new Message("alex@gmail.com", "Ciao la foto numero 1 è bellissima");
 		Message m2 = new Message("aleeeex@gmail.com", "Ciao la foto numero 4 è bellissima");
+		m1.setUser(alexAdmin);
+		m2.setUser(alexUser);
 		
 		messageService.save(m1);
 		messageService.save(m2);

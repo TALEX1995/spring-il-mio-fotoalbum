@@ -11,6 +11,7 @@ import MessageForm from './components/MessageForm.vue';
 const photos = ref(null);
 const sendingMessage = ref(false);
 const successSendMessage = ref(false);
+const pictureUserId = ref(null);
 
 
 // Get all visible photos with axios
@@ -25,15 +26,13 @@ onMounted(getPhotos);
 </script>
 
 <template>
-  <div class="container d-flex justify-content-end mt-2">
-    <button class="btn btn-primary" @click="sendingMessage = true" v-if="!sendingMessage">Invia messaggio
-      all'amministratore della pagina</button>
-  </div>
   <div v-if="successSendMessage" class="container alert alert-success mt-3">
     <span>Messaggio inviato correttamente</span>
   </div>
-  <PhotoIndex v-if="!sendingMessage" :photos="photos" />
-  <MessageForm v-if="sendingMessage" @back="sendingMessage = false" @sendSuccess="successSendMessage = true" />
+  <PhotoIndex v-if="!sendingMessage" :photos="photos" @sendMessage="sendingMessage = true"
+    @userId="userIdFromChild => pictureUserId = userIdFromChild" />
+  <MessageForm v-if="sendingMessage" @back="sendingMessage = false" @sendSuccess="successSendMessage = true"
+    :userId="pictureUserId" />
 </template>
 
 <style scoped></style>

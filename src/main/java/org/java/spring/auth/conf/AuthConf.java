@@ -29,6 +29,7 @@ public class AuthConf {
 				        .requestMatchers("/messages/**").hasAnyAuthority("ADMIN", "USER")
 	        .requestMatchers("/api/**").permitAll()
 	        .requestMatchers("/").permitAll()
+	        .requestMatchers("/register").permitAll()
 	        .requestMatchers("/css/**", "/js/**", "/webjars/**").permitAll()
 //	        .requestMatchers("/**").permitAll()
 	        .and().formLogin()

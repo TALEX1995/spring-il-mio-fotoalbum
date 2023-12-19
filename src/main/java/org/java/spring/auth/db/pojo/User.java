@@ -3,10 +3,13 @@ package org.java.spring.auth.db.pojo;
 import java.util.Collection;
 import java.util.List;
 
+import org.java.spring.db.pojo.Message;
 import org.java.spring.db.pojo.Photo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,6 +19,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class User implements UserDetails{
@@ -29,17 +33,26 @@ public class User implements UserDetails{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
+	@NotBlank(message = "Lo Username è obbligatorio")
 	@Column(nullable = false)
 	private String username;
 	
+	@NotBlank(message = "La password è obbligatoria")
 	@Column(nullable = false)
+	@JsonIgnore
 	private String password;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
+	@JsonIgnore
 	private List<Role> roles;
 	
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private List<Photo> photos;
+	
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private List<Message> messages;
 	
 	public User() { }
 	public User(String username, String password, Role... roles) {
@@ -69,6 +82,8 @@ public class User implements UserDetails{
 	public List<Role> getRoles() {
 		return roles;
 	}
+	
+	@JsonIgnore
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
@@ -82,6 +97,13 @@ public class User implements UserDetails{
 	}
 	public void setPhotos(List<Photo> photos) {
 		this.photos = photos;
+	}
+	
+	public List<Message> getMessages() {
+		return messages;
+	}
+	public void setMessages(List<Message> messages) {
+		this.messages = messages;
 	}
 	
 	@Override
